@@ -23,7 +23,7 @@ class Event extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nama_event', 'tanggal_mulai', 'tanggal_selesai','kode_sertifikat','template_sertifikat', 'nama_ncs', 'callsign_ncs', 'poster'];
+    protected $fillable = ['nama_event', 'tanggal_mulai', 'tanggal_selesai', 'ada_sertifikat', 'kode_sertifikat', 'template_sertifikat', 'nama_ncs', 'callsign_ncs', 'poster'];
 
     /**
      * Get the attributes that should be cast.
@@ -32,7 +32,16 @@ class Event extends Model
      */
     protected function casts(): array
     {
-        return ['nama_event' => 'string', 'tanggal_mulai' => 'datetime:Y-m-d H:i:s', 'tanggal_selesai' => 'datetime:Y-m-d H:i:s', 'nama_ncs' => 'string', 'callsign_ncs' => 'string', 'created_at' => 'datetime:Y-m-d H:i:s', 'updated_at' => 'datetime:Y-m-d H:i:s'];
+        return [
+            'nama_event' => 'string',
+            'tanggal_mulai' => 'datetime:Y-m-d H:i:s',
+            'tanggal_selesai' => 'datetime:Y-m-d H:i:s',
+            'ada_sertifikat' => 'boolean',
+            'nama_ncs' => 'string',
+            'callsign_ncs' => 'string',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
+        ];
     }
 
 

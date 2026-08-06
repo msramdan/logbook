@@ -62,8 +62,15 @@ class EventController extends Controller implements HasMiddleware
     public function store(StoreEventRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $validated['ada_sertifikat'] = $request->boolean('ada_sertifikat');
 
-        $validated['template_sertifikat'] = $this->imageServiceV2->upload(name: 'template_sertifikat', path: $this->templateSertifikatPath, disk: $this->disk);
+        if ($validated['ada_sertifikat']) {
+            $validated['template_sertifikat'] = $this->imageServiceV2->upload(name: 'template_sertifikat', path: $this->templateSertifikatPath, disk: $this->disk);
+        } else {
+            $validated['kode_sertifikat'] = $validated['kode_sertifikat'] ?? null;
+            $validated['template_sertifikat'] = null;
+        }
+
         $validated['poster'] = $this->imageServiceV2->upload(name: 'poster', path: $this->posterPath, disk: $this->disk);
 
         Event::create(attributes: $validated);
@@ -93,8 +100,15 @@ class EventController extends Controller implements HasMiddleware
     public function update(UpdateEventRequest $request, Event $event): RedirectResponse
     {
         $validated = $request->validated();
+        $validated['ada_sertifikat'] = $request->boolean('ada_sertifikat');
 
-        $validated['template_sertifikat'] = $this->imageServiceV2->upload(name: 'template_sertifikat', path: $this->templateSertifikatPath, defaultImage: $event?->template_sertifikat, disk: $this->disk);
+        if ($validated['ada_sertifikat']) {
+            $validated['template_sertifikat'] = $this->imageServiceV2->upload(name: 'template_sertifikat', path: $this->templateSertifikatPath, defaultImage: $event?->template_sertifikat, disk: $this->disk);
+        } else {
+            $validated['kode_sertifikat'] = $validated['kode_sertifikat'] ?? null;
+            $validated['template_sertifikat'] = $this->imageServiceV2->upload(name: 'template_sertifikat', path: $this->templateSertifikatPath, defaultImage: $event?->template_sertifikat, disk: $this->disk);
+        }
+
         $validated['poster'] = $this->imageServiceV2->upload(name: 'poster', path: $this->posterPath, defaultImage: $event?->poster, disk: $this->disk);
 
         $event->update(attributes: $validated);

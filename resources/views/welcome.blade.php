@@ -184,6 +184,69 @@
             z-index: 4;
         }
 
+        .filter-date-box {
+            max-width: 600px;
+            margin: -10px auto 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .filter-date-box label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .filter-date-box input[type="date"] {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            height: 42px;
+            padding: 0 12px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            background: white;
+            width: 100%;
+        }
+
+        .filter-date-box input[type="date"]:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 8px 16px rgba(79, 157, 105, 0.15);
+        }
+
+        .filter-date-box .btn-reset-filter {
+            height: 42px;
+            border-radius: 12px;
+            border: none;
+            background: #e9ecef;
+            color: #495057;
+            padding: 0 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-date-box .btn-reset-filter:hover {
+            background: #dee2e6;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 576px) {
+            .filter-date-box {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-date-box .btn-reset-filter {
+                width: 100%;
+            }
+        }
+
         .table-container {
             background: white;
             border-radius: 15px;
@@ -374,6 +437,20 @@
                     placeholder="Cari berdasarkan callsign, peserta, atau nama event...">
             </div>
 
+            <div class="filter-date-box">
+                <div>
+                    <label for="filterTanggalMulai"><i class="bi bi-calendar3 me-1"></i>Tanggal Mulai</label>
+                    <input type="date" id="filterTanggalMulai">
+                </div>
+                <div>
+                    <label for="filterTanggalSelesai"><i class="bi bi-calendar3 me-1"></i>Tanggal Selesai</label>
+                    <input type="date" id="filterTanggalSelesai">
+                </div>
+                <button type="button" id="btnResetFilter" class="btn-reset-filter" title="Reset filter tanggal">
+                    <i class="bi bi-x-circle"></i> Reset
+                </button>
+            </div>
+
             <div class="table-container">
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
@@ -403,6 +480,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let searchTerm = '';
+        let tanggalMulaiFilter = '';
+        let tanggalSelesaiFilter = '';
         let currentPage = 1;
         let searchTimeout;
 
@@ -418,10 +497,54 @@
                     loadPeserta();
                 }, 300); // Delay 300ms sebelum melakukan pencarian
             });
+
+            document.getElementById('filterTanggalMulai').addEventListener('change', function() {
+                tanggalMulaiFilter = this.value;
+                currentPage = 1;
+                loadPeserta();
+            });
+
+            document.getElementById('filterTanggalSelesai').addEventListener('change', function() {
+                tanggalSelesaiFilter = this.value;
+                currentPage = 1;
+                loadPeserta();
+            });
+
+            document.getElementById('btnResetFilter').addEventListener('click', function() {
+                document.getElementById('filterTanggalMulai').value = '';
+                document.getElementById('filterTanggalSelesai').value = '';
+                tanggalMulaiFilter = '';
+                tanggalSelesaiFilter = '';
+                currentPage = 1;
+                loadPeserta();
+            });
         });
 
+        function formatTanggal(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(String(dateStr).replace(' ', 'T'));
+            if (isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
         function loadPeserta(page = 1) {
-            fetch(`/get-peserta?search=${encodeURIComponent(searchTerm)}&page=${page}`)
+            const params = new URLSearchParams({
+                search: searchTerm,
+                page: page
+            });
+
+            if (tanggalMulaiFilter) {
+                params.set('tanggal_mulai', tanggalMulaiFilter);
+            }
+            if (tanggalSelesaiFilter) {
+                params.set('tanggal_selesai', tanggalSelesaiFilter);
+            }
+
+            fetch(`/get-peserta?${params.toString()}`)
                 .then(res => res.json())
                 .then(res => {
                     const tbody = document.getElementById('table-body');
@@ -433,17 +556,28 @@
                             // Membuat URL unduh dengan format yang benar
                             const downloadUrl =
                                 `/events/${item.event_id}/peserta/${item.id}/download-sertifikat`;
+                            const tanggalEvent =
+                                `${formatTanggal(item.tanggal_mulai)} – ${formatTanggal(item.tanggal_selesai)}`;
+                            const adaSertifikat = item.ada_sertifikat == 1 || item.ada_sertifikat === true;
+                            const sertifikatCell = adaSertifikat
+                                ? `<a href="${downloadUrl}" target="_blank" class="btn-download">
+                                        <i class="bi bi-download"></i> Unduh
+                                   </a>`
+                                : `<span class="text-muted" style="font-size: 0.85rem; font-style: italic;">—</span>`;
 
                             tbody.innerHTML += `
                                 <tr>
                                     <td><span class="badge">${item.callsign}</span></td>
                                     <td><strong>${item.nama_peserta}</strong></td>
                                     <td>
-                                        <a href="${downloadUrl}" target="_blank" class="btn-download">
-                                            <i class="bi bi-download"></i> Unduh
-                                        </a>
+                                        ${sertifikatCell}
                                     </td>
-                                    <td>${item.nama_event}</td>
+                                    <td>
+                                        <div>${item.nama_event}</div>
+                                        <div style="font-size: 0.8rem; font-style: italic; color: #6c757d; margin-top: 2px;">
+                                            ${tanggalEvent}
+                                        </div>
+                                    </td>
                                 </tr>
                             `;
                         });
@@ -472,30 +606,72 @@
             const paginationContainer = document.getElementById('pagination-links');
             paginationContainer.innerHTML = '';
 
-            if (pagination.last_page > 1) {
-                // Tombol Previous
+            const current = pagination.current_page;
+            const last = pagination.last_page;
+            const maxVisible = 10;
+
+            if (last <= 1) return;
+
+            // Tombol Previous
+            paginationContainer.innerHTML += `
+                <li class="page-item ${current === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${current - 1})">&laquo;</a>
+                </li>
+            `;
+
+            // Hitung rentang halaman (maks 10 nomor)
+            let start = Math.max(1, current - Math.floor(maxVisible / 2));
+            let end = start + maxVisible - 1;
+
+            if (end > last) {
+                end = last;
+                start = Math.max(1, end - maxVisible + 1);
+            }
+
+            if (start > 1) {
                 paginationContainer.innerHTML += `
-                    <li class="page-item ${pagination.current_page === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${pagination.current_page - 1})">&laquo;</a>
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(1)">1</a>
                     </li>
                 `;
-
-                // Tombol Halaman
-                for (let i = 1; i <= pagination.last_page; i++) {
+                if (start > 2) {
                     paginationContainer.innerHTML += `
-                        <li class="page-item ${i === pagination.current_page ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${i})">${i}</a>
+                        <li class="page-item disabled">
+                            <span class="page-link">…</span>
                         </li>
                     `;
                 }
+            }
 
-                // Tombol Next
+            for (let i = start; i <= end; i++) {
                 paginationContainer.innerHTML += `
-                    <li class="page-item ${pagination.current_page === pagination.last_page ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${pagination.current_page + 1})">&raquo;</a>
+                    <li class="page-item ${i === current ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${i})">${i}</a>
                     </li>
                 `;
             }
+
+            if (end < last) {
+                if (end < last - 1) {
+                    paginationContainer.innerHTML += `
+                        <li class="page-item disabled">
+                            <span class="page-link">…</span>
+                        </li>
+                    `;
+                }
+                paginationContainer.innerHTML += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${last})">${last}</a>
+                    </li>
+                `;
+            }
+
+            // Tombol Next
+            paginationContainer.innerHTML += `
+                <li class="page-item ${current === last ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${current + 1})">&raquo;</a>
+                </li>
+            `;
         }
     </script>
 </body>

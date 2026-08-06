@@ -20,6 +20,8 @@ class WebController extends Controller
     public function getPeserta(Request $request)
     {
         $search = $request->input('search', '');
+        $tanggalMulai = $request->input('tanggal_mulai');
+        $tanggalSelesai = $request->input('tanggal_selesai');
 
         $query = DB::table('pesertas')
             ->join('events', 'pesertas.event_id', '=', 'events.id')
@@ -30,6 +32,9 @@ class WebController extends Controller
                 'pesertas.nama_peserta',
                 'pesertas.nomor_sertifikat',
                 'events.nama_event',
+                'events.tanggal_mulai',
+                'events.tanggal_selesai',
+                'events.ada_sertifikat',
                 'events.kode_sertifikat',
                 'events.template_sertifikat'
             );
@@ -41,6 +46,15 @@ class WebController extends Controller
                     ->orWhere('pesertas.nomor_sertifikat', 'like', "%{$search}%")
                     ->orWhere('events.nama_event', 'like', "%{$search}%");
             });
+        }
+
+        // Filter rentang berdasarkan field tanggal_mulai event
+        if ($tanggalMulai) {
+            $query->whereDate('events.tanggal_mulai', '>=', $tanggalMulai);
+        }
+
+        if ($tanggalSelesai) {
+            $query->whereDate('events.tanggal_mulai', '<=', $tanggalSelesai);
         }
 
         $pesertas = $query->orderBy('pesertas.created_at', 'desc')
@@ -71,6 +85,7 @@ class WebController extends Controller
                 'pesertas.callsign',
                 'pesertas.nomor_sertifikat',
                 'events.nama_event',
+                'events.ada_sertifikat',
                 'events.kode_sertifikat',
                 'events.template_sertifikat'
             )
@@ -79,6 +94,10 @@ class WebController extends Controller
         // 2. Validasi jika peserta tidak ditemukan
         if (!$peserta) {
             abort(404, 'Data Peserta atau Event tidak ditemukan.');
+        }
+
+        if (!$peserta->ada_sertifikat) {
+            abort(404, 'Event ini tidak menyediakan sertifikat.');
         }
 
         // 3. Validasi jika template sertifikat tidak ada

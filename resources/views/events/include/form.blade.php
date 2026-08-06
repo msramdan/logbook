@@ -43,11 +43,36 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
+            <label for="ada-sertifikat">{{ __(key: 'Config Sertifikat') }}</label>
+            @php
+                $adaSertifikat = old(
+                    'ada_sertifikat',
+                    isset($event) ? ($event->ada_sertifikat ? '1' : '0') : '1',
+                );
+            @endphp
+            <select name="ada_sertifikat" id="ada-sertifikat"
+                class="form-select @error('ada_sertifikat') is-invalid @enderror" required>
+                <option value="1" {{ (string) $adaSertifikat === '1' ? 'selected' : '' }}>
+                    {{ __(key: 'Ada Sertifikat') }}
+                </option>
+                <option value="0" {{ (string) $adaSertifikat === '0' ? 'selected' : '' }}>
+                    {{ __(key: 'Tanpa Sertifikat') }}
+                </option>
+            </select>
+            @error('ada_sertifikat')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6 field-sertifikat">
+        <div class="form-group">
             <label for="kode-sertifikat">{{ __(key: 'Kode Sertifikat') }}</label>
             <input type="text" name="kode_sertifikat" id="kode-sertifikat"
                 class="form-control @error('kode_sertifikat') is-invalid @enderror"
                 value="{{ isset($event) ? $event->kode_sertifikat : old(key: 'kode_sertifikat') }}"
-                placeholder="{{ __(key: 'Nama Event') }}" required />
+                placeholder="{{ __(key: 'Kode Sertifikat') }}" />
             @error('kode_sertifikat')
                 <span class="text-danger">
                     {{ $message }}
@@ -83,7 +108,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 field-sertifikat">
         <div class="row g-0">
             <div class="col-md-5 text-center">
                 <img src="{{ $event?->template_sertifikat ?? 'https://placehold.co/300?text=No+Image+Available' }}"
@@ -93,8 +118,7 @@
                 <div class="form-group ms-3">
                     <label for="template-sertifikat">{{ __(key: 'Template Sertifikat') }}</label>
                     <input type="file" name="template_sertifikat"
-                        class="form-control @error('template_sertifikat') is-invalid @enderror" id="template-sertifikat"
-                        {{ !isset($event) ? 'required' : '' }}>
+                        class="form-control @error('template_sertifikat') is-invalid @enderror" id="template-sertifikat">
                     @error('template_sertifikat')
                         <span class="text-danger">
                             {{ $message }}
@@ -135,3 +159,31 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('ada-sertifikat');
+        const fields = document.querySelectorAll('.field-sertifikat');
+        const kodeInput = document.getElementById('kode-sertifikat');
+        const templateInput = document.getElementById('template-sertifikat');
+
+        function toggleSertifikatFields() {
+            const adaSertifikat = select.value === '1';
+            fields.forEach(function(field) {
+                field.style.display = adaSertifikat ? '' : 'none';
+            });
+            if (kodeInput) {
+                kodeInput.required = adaSertifikat;
+            }
+            if (templateInput) {
+                const isCreate = {{ !isset($event) ? 'true' : 'false' }};
+                templateInput.required = adaSertifikat && isCreate;
+            }
+        }
+
+        if (select) {
+            select.addEventListener('change', toggleSertifikatFields);
+            toggleSertifikatFields();
+        }
+    });
+</script>

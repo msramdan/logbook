@@ -44,6 +44,7 @@
                                             <th>{{ __(key: 'Nama Event') }}</th>
                                             <th>{{ __(key: 'Tanggal Mulai') }}</th>
                                             <th>{{ __(key: 'Tanggal Selesai') }}</th>
+                                            <th>{{ __(key: 'Sertifikat') }}</th>
                                             <th>{{ __(key: 'Kode Sertifikat') }}</th>
                                             <th>{{ __(key: 'Nama Ncs') }}</th>
                                             <th>{{ __(key: 'Callsign Ncs') }}</th>
@@ -90,6 +91,15 @@
                 {
                     data: 'tanggal_selesai',
                     name: 'tanggal_selesai',
+                },
+                {
+                    data: 'ada_sertifikat',
+                    name: 'ada_sertifikat',
+                    render: function(data) {
+                        return data == 1 || data === true
+                            ? '<span class="badge bg-success">Ada Sertifikat</span>'
+                            : '<span class="badge bg-secondary">Tanpa Sertifikat</span>';
+                    }
                 },
                 {
                     data: 'kode_sertifikat',

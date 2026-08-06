@@ -267,9 +267,21 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-bold text-muted">
+                                            {{ __('Config Sertifikat') }}
+                                        </td>
+                                        <td>
+                                            @if ($event->ada_sertifikat)
+                                                <span class="badge bg-success">{{ __('Ada Sertifikat') }}</span>
+                                            @else
+                                                <span class="badge bg-secondary">{{ __('Tanpa Sertifikat') }}</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-muted">
                                             {{ __('Kode Sertifikat') }}
                                         </td>
-                                        <td class="fw-semibold">{{ $event->kode_sertifikat }}</td>
+                                        <td class="fw-semibold">{{ $event->kode_sertifikat ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold text-muted">
