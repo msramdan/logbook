@@ -1,0 +1,25 @@
+<td>
+    {{-- @can('event view') --}}
+        <a href="{{ route(name: 'events.show', parameters: $model->id) }}" class="mb-1 btn btn-outline-success btn-sm">
+            <i class="fa fa-eye"></i>
+        </a>
+    {{-- @endcan --}}
+
+    {{-- @can('event edit') --}}
+        <a href="{{ route(name: 'events.edit', parameters: $model->id) }}" class="mb-1 btn btn-outline-primary btn-sm">
+            <i class="fa fa-pencil-alt"></i>
+        </a>
+    {{-- @endcan --}}
+
+    {{-- @can('event delete') --}}
+        <form action="{{ route(name: 'events.destroy', parameters: $model->id) }}" method="post" class="d-inline"
+            onsubmit="return confirm('Are you sure to delete this record?')">
+            @csrf
+            @method('delete')
+
+            <button class="mb-1 btn btn-outline-danger btn-sm">
+                <i class="ace-icon fa fa-trash-alt"></i>
+            </button>
+        </form>
+    {{-- @endcan --}}
+</td>
