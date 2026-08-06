@@ -147,6 +147,266 @@
             z-index: 2;
         }
 
+        /* ===== Top 5 Ranking ===== */
+        .ranking-section {
+            margin: 0 auto 28px;
+            max-width: 900px;
+        }
+
+        .ranking-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .ranking-header h4 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            letter-spacing: 0.3px;
+        }
+
+        .ranking-header .trophy {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f6c945, #f39c12);
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 18px rgba(243, 156, 18, 0.35);
+        }
+
+        .ranking-header p {
+            margin: 4px 0 0;
+            font-size: 0.82rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rank-card {
+            display: grid;
+            grid-template-columns: 56px 1fr auto;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid rgba(26, 77, 46, 0.08);
+            box-shadow: 0 8px 22px rgba(26, 77, 46, 0.07);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: rankSlideIn 0.5s ease both;
+        }
+
+        .rank-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(26, 77, 46, 0.12);
+        }
+
+        .rank-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--secondary-color);
+        }
+
+        .rank-card.rank-1 {
+            background: linear-gradient(90deg, rgba(246, 201, 69, 0.14), #fff 45%);
+        }
+
+        .rank-card.rank-1::before {
+            background: linear-gradient(180deg, #f6c945, #e67e22);
+            width: 5px;
+        }
+
+        .rank-card.rank-2 {
+            background: linear-gradient(90deg, rgba(189, 195, 199, 0.22), #fff 45%);
+        }
+
+        .rank-card.rank-2::before {
+            background: linear-gradient(180deg, #bdc3c7, #7f8c8d);
+        }
+
+        .rank-card.rank-3 {
+            background: linear-gradient(90deg, rgba(205, 127, 50, 0.14), #fff 45%);
+        }
+
+        .rank-card.rank-3::before {
+            background: linear-gradient(180deg, #cd7f32, #a65e1d);
+        }
+
+        .rank-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(26, 77, 46, 0.2);
+            line-height: 1.1;
+        }
+
+        .rank-card.rank-1 .rank-badge {
+            background: linear-gradient(135deg, #f6c945, #e67e22);
+            box-shadow: 0 8px 16px rgba(230, 126, 34, 0.35);
+        }
+
+        .rank-card.rank-2 .rank-badge {
+            background: linear-gradient(135deg, #d5d8dc, #7f8c8d);
+            box-shadow: 0 8px 16px rgba(127, 140, 141, 0.35);
+        }
+
+        .rank-card.rank-3 .rank-badge {
+            background: linear-gradient(135deg, #e0a96d, #a65e1d);
+            box-shadow: 0 8px 16px rgba(166, 94, 29, 0.35);
+        }
+
+        .rank-badge small {
+            font-size: 0.58rem;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+
+        .rank-badge strong {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .rank-info {
+            min-width: 0;
+        }
+
+        .rank-info .callsign-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 10px rgba(26, 77, 46, 0.2);
+            margin-bottom: 4px;
+        }
+
+        .rank-info .name {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rank-progress {
+            margin-top: 8px;
+            height: 6px;
+            background: #eef2ef;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .rank-progress span {
+            display: block;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            transition: width 0.8s ease;
+        }
+
+        .rank-stat {
+            text-align: right;
+            min-width: 78px;
+        }
+
+        .rank-stat .count {
+            display: block;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .rank-stat .label {
+            font-size: 0.7rem;
+            color: #6c757d;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .ranking-empty {
+            text-align: center;
+            padding: 24px;
+            color: #6c757d;
+            background: #f8faf9;
+            border-radius: 16px;
+            border: 1px dashed rgba(26, 77, 46, 0.15);
+        }
+
+        @keyframes rankSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .rank-card {
+                grid-template-columns: 44px 1fr;
+                gap: 10px;
+                padding: 12px 14px;
+            }
+
+            .rank-badge {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+            }
+
+            .rank-stat {
+                grid-column: 2;
+                text-align: left;
+                min-width: 0;
+                display: flex;
+                align-items: baseline;
+                gap: 6px;
+            }
+
+            .rank-stat .count {
+                font-size: 1.15rem;
+            }
+        }
+
         .search-box {
             position: relative;
             margin-bottom: 30px;
@@ -431,6 +691,47 @@
         </div>
 
         <div class="content-area">
+            @if ($topPeserta->isNotEmpty())
+                @php
+                    $maxLog = max(1, (int) $topPeserta->max('jumlah_log'));
+                @endphp
+                <div class="ranking-section">
+                    <div class="ranking-header flex-column">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <div class="trophy"><i class="bi bi-trophy-fill"></i></div>
+                            <h4>Top 5 Partisipan Teraktif</h4>
+                        </div>
+                        <p>Peringkat berdasarkan jumlah logs terbanyak</p>
+                    </div>
+
+                    <div class="ranking-list">
+                        @foreach ($topPeserta as $index => $row)
+                            @php
+                                $rank = $index + 1;
+                                $percent = min(100, round(($row->jumlah_log / $maxLog) * 100));
+                            @endphp
+                            <div class="rank-card rank-{{ $rank }}" style="animation-delay: {{ $index * 0.08 }}s">
+                                <div class="rank-badge">
+                                    <small>Rank</small>
+                                    <strong>{{ $rank }}</strong>
+                                </div>
+                                <div class="rank-info">
+                                    <span class="callsign-pill">{{ $row->callsign }}</span>
+                                    <p class="name" title="{{ $row->nama_peserta }}">{{ $row->nama_peserta }}</p>
+                                    <div class="rank-progress" aria-hidden="true">
+                                        <span style="width: {{ $percent }}%"></span>
+                                    </div>
+                                </div>
+                                <div class="rank-stat">
+                                    <span class="count">{{ $row->jumlah_log }}</span>
+                                    <span class="label">{{ $row->jumlah_log > 1 ? 'Logs' : 'Log' }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             <div class="search-box">
                 <i class="bi bi-search"></i>
                 <input type="text" id="searchInput" class="form-control"

@@ -14,7 +14,20 @@ class WebController extends Controller
     public function index()
     {
         $lastEvent = Event::latest()->first();
-        return view('welcome', compact('lastEvent'));
+
+        $topPeserta = DB::table('pesertas')
+            ->select(
+                'callsign',
+                DB::raw('MAX(nama_peserta) as nama_peserta'),
+                DB::raw('COUNT(*) as jumlah_log')
+            )
+            ->groupBy('callsign')
+            ->orderByDesc('jumlah_log')
+            ->orderBy('callsign')
+            ->limit(5)
+            ->get();
+
+        return view('welcome', compact('lastEvent', 'topPeserta'));
     }
 
     public function getPeserta(Request $request)
