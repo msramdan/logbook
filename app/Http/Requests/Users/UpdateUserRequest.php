@@ -33,12 +33,25 @@ class UpdateUserRequest extends FormRequest
 
     private function setId(): int|string
     {
-        if (str_contains(haystack: request()->url(), needle: 'api')) {
-            // /api/users/1
-            return request()->segment(3);
+        $user = $this->route('user');
+
+        if ($user instanceof \App\Models\User) {
+            return $user->getKey();
         }
 
-        // /users/1
-        return request()->segment(2);
+        if (is_numeric($user)) {
+            return $user;
+        }
+
+        // Fallback: ambil id setelah segment "users" (tanpa cek "api" di URL,
+        // karena domain misalnya rapidiy ikut match)
+        $segments = $this->segments();
+        $index = array_search('users', $segments, true);
+
+        if ($index !== false && isset($segments[$index + 1]) && is_numeric($segments[$index + 1])) {
+            return $segments[$index + 1];
+        }
+
+        return 0;
     }
 }
