@@ -41,15 +41,12 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>ID</th>
                                             <th>{{ __(key: 'Nama Event') }}</th>
                                             <th>{{ __(key: 'Tanggal Mulai') }}</th>
                                             <th>{{ __(key: 'Tanggal Selesai') }}</th>
-                                            <th>{{ __(key: 'Sertifikat') }}</th>
-                                            <th>{{ __(key: 'Kode Sertifikat') }}</th>
                                             <th>{{ __(key: 'Nama Ncs') }}</th>
                                             <th>{{ __(key: 'Callsign Ncs') }}</th>
-                                            <th>{{ __(key: 'Template Sertifikat') }}</th>
-                                            <th>{{ __(key: 'Poster') }}</th>
                                             <th>{{ __(key: 'Action') }}</th>
                                         </tr>
                                     </thead>
@@ -80,7 +77,17 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route(name: 'events.index') }}",
+            // Default: inputan terbaru (id terbesar) di atas
+            order: [
+                [0, 'desc']
+            ],
             columns: [{
+                    data: 'id',
+                    name: 'id',
+                    visible: false,
+                    searchable: false
+                },
+                {
                     data: 'nama_event',
                     name: 'nama_event',
                 },
@@ -93,47 +100,12 @@
                     name: 'tanggal_selesai',
                 },
                 {
-                    data: 'ada_sertifikat',
-                    name: 'ada_sertifikat',
-                    render: function(data) {
-                        return data == 1 || data === true
-                            ? '<span class="badge bg-success">Ada Sertifikat</span>'
-                            : '<span class="badge bg-secondary">Tanpa Sertifikat</span>';
-                    }
-                },
-                {
-                    data: 'kode_sertifikat',
-                    name: 'kode_sertifikat',
-                },
-                {
                     data: 'nama_ncs',
                     name: 'nama_ncs',
                 },
                 {
                     data: 'callsign_ncs',
                     name: 'callsign_ncs',
-                },
-                {
-                    data: 'template_sertifikat',
-                    name: 'template_sertifikat',
-                    orderable: false,
-                    searchable: false,
-                    render: function(data) {
-                        return `<div >
-                            <img src="${data}" alt="Template Sertifikat" style="width:100px"  />
-                        </div>`;
-                    }
-                },
-                {
-                    data: 'poster',
-                    name: 'poster',
-                    orderable: false,
-                    searchable: false,
-                    render: function(data) {
-                        return `<div >
-                            <img src="${data}" alt="Poster" style="width:100px"  />
-                        </div>`;
-                    }
                 },
                 {
                     data: 'action',

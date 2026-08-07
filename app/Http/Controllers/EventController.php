@@ -37,11 +37,21 @@ class EventController extends Controller implements HasMiddleware
     public function index(): View|JsonResponse
     {
         if (request()->ajax()) {
-            $events = Event::query();
+            // Jangan load poster/template (accessor image) biar list ringan
+            $events = Event::query()
+                ->select([
+                    'id',
+                    'nama_event',
+                    'tanggal_mulai',
+                    'tanggal_selesai',
+                    'nama_ncs',
+                    'callsign_ncs',
+                    'created_at',
+                ]);
 
             return Datatables::of(source: $events)
-
                 ->addColumn(name: 'action', content: 'events.include.action')
+                ->orderColumn('id', 'id $1')
                 ->toJson();
         }
 
