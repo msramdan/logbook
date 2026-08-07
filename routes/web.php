@@ -6,17 +6,19 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Default route ke landing page
 Route::get('/', [WebController::class, 'index']);
 Route::get('/get-peserta', [WebController::class, 'getPeserta'])->name('web.getPeserta');
+Route::get('/get-peserta-detail', [WebController::class, 'getPesertaDetail'])->name('web.getPesertaDetail');
 // Route::get('/download-sertifikat', [WebController::class, 'downloadSertifikat'])->name('download.sertifikat');
 Route::get('/events/{event}/peserta/{peserta}/download-sertifikat', [WebController::class, 'downloadSertifikat'])
     ->name('sertifikat.download');
 
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/profile', ProfileController::class)->name('profile');
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleAndPermissionController::class);

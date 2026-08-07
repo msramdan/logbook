@@ -252,6 +252,349 @@
             background: linear-gradient(180deg, #cd7f32, #a65e1d);
         }
 
+        .rank-card.has-others {
+            cursor: pointer;
+        }
+
+        .rank-card.has-others:hover {
+            border-color: rgba(26, 77, 46, 0.25);
+        }
+
+        .rank-others {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 6px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            background: rgba(26, 77, 46, 0.1);
+            color: var(--primary-color);
+            font-size: 0.72rem;
+            font-weight: 600;
+            vertical-align: middle;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .rank-card.has-others:hover .rank-others {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .rank-name-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .rank-name-row .name {
+            margin: 0;
+            max-width: 100%;
+        }
+
+        .rank-hint {
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #8a9590;
+            font-style: italic;
+        }
+
+        /* Ranking modal */
+        .rank-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 30, 20, 0.55);
+            z-index: 1050;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .rank-modal-backdrop.show {
+            display: flex;
+        }
+
+        .rank-modal {
+            width: 100%;
+            max-width: 480px;
+            max-height: min(80vh, 560px);
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: rankSlideIn 0.3s ease both;
+        }
+
+        .rank-modal-header {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .rank-modal-header h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .rank-modal-header p {
+            margin: 2px 0 0;
+            font-size: 0.78rem;
+            opacity: 0.9;
+        }
+
+        .rank-modal-close {
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .rank-modal-close:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .rank-modal-body {
+            padding: 12px 16px 18px;
+            overflow-y: auto;
+        }
+
+        .rank-modal-item {
+            display: grid;
+            grid-template-columns: 36px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eef2ef;
+        }
+
+        .rank-modal-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-modal-item .no {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #eef5f0;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rank-modal-item .cs {
+            display: inline-flex;
+            padding: 2px 10px;
+            border-radius: 999px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .rank-modal-item .nm {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+
+        .rank-modal-item .lg {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .rank-modal-item .lg small {
+            display: block;
+            font-size: 0.65rem;
+            color: #6c757d;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        /* Clickable participant links */
+        .participant-link {
+            cursor: pointer;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        .participant-link:hover {
+            opacity: 0.88;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .table .badge.participant-link:hover {
+            text-decoration: none;
+            transform: scale(1.04);
+        }
+
+        strong.participant-link {
+            color: inherit;
+        }
+
+        /* Participant detail modal */
+        .detail-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 30, 20, 0.55);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .detail-modal-backdrop.show {
+            display: flex;
+        }
+
+        .detail-modal {
+            width: 100%;
+            max-width: 520px;
+            max-height: min(85vh, 640px);
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: rankSlideIn 0.3s ease both;
+        }
+
+        .detail-modal-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .detail-modal-header .cs {
+            display: inline-flex;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+        }
+
+        .detail-modal-header h5 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .detail-modal-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 16px 16px 8px;
+        }
+
+        .detail-stat {
+            background: #f4f8f5;
+            border-radius: 14px;
+            padding: 12px 10px;
+            text-align: center;
+            border: 1px solid rgba(26, 77, 46, 0.08);
+        }
+
+        .detail-stat .val {
+            display: block;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1.1;
+        }
+
+        .detail-stat .lbl {
+            font-size: 0.68rem;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .detail-stat.rank-stat {
+            background: linear-gradient(135deg, rgba(246, 201, 69, 0.2), rgba(79, 157, 105, 0.12));
+        }
+
+        .detail-modal-body {
+            padding: 8px 16px 18px;
+            overflow-y: auto;
+        }
+
+        .detail-modal-body h6 {
+            margin: 8px 0 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .detail-event-item {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #f8faf9;
+            border: 1px solid #eef2ef;
+            margin-bottom: 8px;
+        }
+
+        .detail-event-item .en {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #2c3e50;
+            margin: 0 0 2px;
+        }
+
+        .detail-event-item .ed {
+            margin: 0;
+            font-size: 0.75rem;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .detail-loading,
+        .detail-error {
+            text-align: center;
+            padding: 28px 16px;
+            color: #6c757d;
+        }
+
+        .detail-error {
+            color: #b02a37;
+        }
+
         .rank-badge {
             width: 48px;
             height: 48px;
@@ -701,36 +1044,131 @@
                             <div class="trophy"><i class="bi bi-trophy-fill"></i></div>
                             <h4>Top 5 Partisipan Teraktif</h4>
                         </div>
-                        <p>Peringkat berdasarkan jumlah logs terbanyak</p>
+                        <p>Peringkat berdasarkan jumlah logs terbanyak (log sama = rank sama)</p>
                     </div>
 
                     <div class="ranking-list">
-                        @foreach ($topPeserta as $index => $row)
+                        @foreach ($topPeserta as $index => $group)
                             @php
-                                $rank = $index + 1;
-                                $percent = min(100, round(($row->jumlah_log / $maxLog) * 100));
+                                $rank = $group->rank;
+                                $row = $group->display;
+                                $percent = min(100, round(($group->jumlah_log / $maxLog) * 100));
+                                $hasOthers = $group->others_count > 0;
                             @endphp
-                            <div class="rank-card rank-{{ $rank }}" style="animation-delay: {{ $index * 0.08 }}s">
+                            <div
+                                class="rank-card {{ $rank <= 3 ? 'rank-'.$rank : '' }} {{ $hasOthers ? 'has-others' : '' }}"
+                                style="animation-delay: {{ $index * 0.08 }}s"
+                                @if ($hasOthers)
+                                    role="button"
+                                    tabindex="0"
+                                    data-rank-modal="rank-modal-{{ $rank }}"
+                                    aria-label="Lihat semua di rank {{ $rank }}"
+                                @endif
+                            >
                                 <div class="rank-badge">
                                     <small>Rank</small>
                                     <strong>{{ $rank }}</strong>
                                 </div>
                                 <div class="rank-info">
-                                    <span class="callsign-pill">{{ $row->callsign }}</span>
-                                    <p class="name" title="{{ $row->nama_peserta }}">{{ $row->nama_peserta }}</p>
+                                    <span class="callsign-pill participant-link"
+                                        data-callsign="{{ $row->callsign }}"
+                                        title="Lihat detail">{{ $row->callsign }}</span>
+                                    <div class="rank-name-row">
+                                        <p class="name participant-link"
+                                            data-callsign="{{ $row->callsign }}"
+                                            title="{{ $row->nama_peserta }} — lihat detail">{{ $row->nama_peserta }}</p>
+                                        @if ($hasOthers)
+                                            <span class="rank-others" data-rank-others="+">+ {{ $group->others_count }} orang lain</span>
+                                        @endif
+                                    </div>
+                                    @if ($hasOthers)
+                                        <div class="rank-hint">Ketuk +orang lain untuk daftar rank, atau nama/callsign untuk detail</div>
+                                    @endif
                                     <div class="rank-progress" aria-hidden="true">
                                         <span style="width: {{ $percent }}%"></span>
                                     </div>
                                 </div>
                                 <div class="rank-stat">
-                                    <span class="count">{{ $row->jumlah_log }}</span>
-                                    <span class="label">{{ $row->jumlah_log > 1 ? 'Logs' : 'Log' }}</span>
+                                    <span class="count">{{ $group->jumlah_log }}</span>
+                                    <span class="label">{{ $group->jumlah_log > 1 ? 'Logs' : 'Log' }}</span>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
+
+                {{-- Popup daftar rank dengan multi partisipan --}}
+                @foreach ($topPeserta as $group)
+                    @if ($group->others_count > 0)
+                        <div class="rank-modal-backdrop" id="rank-modal-{{ $group->rank }}" aria-hidden="true">
+                            <div class="rank-modal" role="dialog" aria-modal="true"
+                                aria-labelledby="rank-modal-title-{{ $group->rank }}">
+                                <div class="rank-modal-header">
+                                    <div>
+                                        <h5 id="rank-modal-title-{{ $group->rank }}">
+                                            Rank {{ $group->rank }} — {{ $group->jumlah_log }} Logs
+                                        </h5>
+                                        <p>{{ $group->members->count() }} partisipan (urutan abjad)</p>
+                                    </div>
+                                    <button type="button" class="rank-modal-close" data-close-modal
+                                        aria-label="Tutup">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                                <div class="rank-modal-body">
+                                    @foreach ($group->members as $i => $m)
+                                        <div class="rank-modal-item">
+                                            <div class="no">{{ $i + 1 }}</div>
+                                            <div>
+                                                <span class="cs participant-link"
+                                                    data-callsign="{{ $m->callsign }}">{{ $m->callsign }}</span>
+                                                <p class="nm participant-link"
+                                                    data-callsign="{{ $m->callsign }}">{{ $m->nama_peserta }}</p>
+                                            </div>
+                                            <div class="lg">
+                                                {{ $m->jumlah_log }}
+                                                <small>Logs</small>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
             @endif
+
+            {{-- Popup detail partisipan --}}
+            <div class="detail-modal-backdrop" id="peserta-detail-modal" aria-hidden="true">
+                <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="peserta-detail-title">
+                    <div class="detail-modal-header">
+                        <div>
+                            <span class="cs" id="detail-callsign">—</span>
+                            <h5 id="peserta-detail-title">—</h5>
+                        </div>
+                        <button type="button" class="rank-modal-close" data-close-detail aria-label="Tutup">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="detail-modal-stats" id="detail-stats" style="display:none;">
+                        <div class="detail-stat rank-stat">
+                            <span class="val" id="detail-rank">—</span>
+                            <span class="lbl">Rank Global</span>
+                        </div>
+                        <div class="detail-stat">
+                            <span class="val" id="detail-logs">—</span>
+                            <span class="lbl">Total Logs</span>
+                        </div>
+                        <div class="detail-stat">
+                            <span class="val" id="detail-events">—</span>
+                            <span class="lbl">Event Diikuti</span>
+                        </div>
+                    </div>
+                    <div class="detail-modal-body" id="detail-body">
+                        <div class="detail-loading">Memuat data...</div>
+                    </div>
+                </div>
+            </div>
 
             <div class="search-box">
                 <i class="bi bi-search"></i>
@@ -789,6 +1227,94 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadPeserta();
 
+            // Ranking popup: log sama = rank sama
+            document.querySelectorAll('[data-rank-modal]').forEach(function(card) {
+                const openModal = function(e) {
+                    // Jangan buka list rank jika klik detail partisipan
+                    if (e.target.closest('.participant-link')) {
+                        return;
+                    }
+                    // Hanya buka list bila ada badge +orang lain / area card
+                    const modal = document.getElementById(card.getAttribute('data-rank-modal'));
+                    if (modal) {
+                        modal.classList.add('show');
+                        modal.setAttribute('aria-hidden', 'false');
+                        document.body.style.overflow = 'hidden';
+                    }
+                };
+                card.addEventListener('click', openModal);
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal(e);
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-close-modal]').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const modal = btn.closest('.rank-modal-backdrop');
+                    if (modal) {
+                        modal.classList.remove('show');
+                        modal.setAttribute('aria-hidden', 'true');
+                        if (!document.querySelector('.detail-modal-backdrop.show')) {
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.rank-modal-backdrop').forEach(function(backdrop) {
+                backdrop.addEventListener('click', function(e) {
+                    if (e.target === backdrop) {
+                        backdrop.classList.remove('show');
+                        backdrop.setAttribute('aria-hidden', 'true');
+                        if (!document.querySelector('.detail-modal-backdrop.show')) {
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            // Detail partisipan (delegation untuk table + ranking)
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('.participant-link');
+                if (!link) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const callsign = link.getAttribute('data-callsign');
+                if (callsign) {
+                    openPesertaDetail(callsign);
+                }
+            });
+
+            document.querySelectorAll('[data-close-detail]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    closePesertaDetail();
+                });
+            });
+
+            const detailBackdrop = document.getElementById('peserta-detail-modal');
+            if (detailBackdrop) {
+                detailBackdrop.addEventListener('click', function(e) {
+                    if (e.target === detailBackdrop) {
+                        closePesertaDetail();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePesertaDetail();
+                    document.querySelectorAll('.rank-modal-backdrop.show').forEach(function(modal) {
+                        modal.classList.remove('show');
+                        modal.setAttribute('aria-hidden', 'true');
+                    });
+                    document.body.style.overflow = '';
+                }
+            });
+
             document.getElementById('searchInput').addEventListener('keyup', function() {
                 searchTerm = this.value;
                 currentPage = 1;
@@ -832,6 +1358,79 @@
             });
         }
 
+        function openPesertaDetail(callsign) {
+            const backdrop = document.getElementById('peserta-detail-modal');
+            const body = document.getElementById('detail-body');
+            const stats = document.getElementById('detail-stats');
+
+            if (!backdrop) return;
+
+            document.getElementById('detail-callsign').textContent = callsign;
+            document.getElementById('peserta-detail-title').textContent = 'Memuat...';
+            stats.style.display = 'none';
+            body.innerHTML = '<div class="detail-loading"><i class="bi bi-arrow-repeat"></i> Memuat data partisipan...</div>';
+            backdrop.classList.add('show');
+            backdrop.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+
+            fetch(`/get-peserta-detail?callsign=${encodeURIComponent(callsign)}`)
+                .then(res => {
+                    if (!res.ok) {
+                        return res.json().then(err => Promise.reject(err));
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById('detail-callsign').textContent = data.callsign;
+                    document.getElementById('peserta-detail-title').textContent = data.nama_peserta;
+                    document.getElementById('detail-rank').textContent = data.rank ?? '—';
+                    document.getElementById('detail-logs').textContent = data.jumlah_log ?? 0;
+                    document.getElementById('detail-events').textContent = data.jumlah_event ?? 0;
+                    stats.style.display = 'grid';
+
+                    let peersNote = '';
+                    if (data.peers_at_rank > 1) {
+                        peersNote = `<p style="margin:0 0 10px;font-size:0.8rem;color:#6c757d;">
+                            Rank ${data.rank} dipegang bersama ${data.peers_at_rank} partisipan (log sama).
+                        </p>`;
+                    }
+
+                    let eventsHtml = '';
+                    if (data.events && data.events.length > 0) {
+                        eventsHtml = data.events.map(ev => {
+                            const tgl = `${formatTanggal(ev.tanggal_mulai)} – ${formatTanggal(ev.tanggal_selesai)}`;
+                            return `<div class="detail-event-item">
+                                <p class="en">${ev.nama_event || '-'}</p>
+                                <p class="ed">${tgl} · ${ev.jumlah_log_event} log</p>
+                            </div>`;
+                        }).join('');
+                    } else {
+                        eventsHtml = '<div class="detail-loading">Belum ada daftar event.</div>';
+                    }
+
+                    body.innerHTML = `
+                        ${peersNote}
+                        <h6><i class="bi bi-calendar-event me-1"></i>Event yang diikuti (${data.jumlah_event || 0})</h6>
+                        ${eventsHtml}
+                    `;
+                })
+                .catch(err => {
+                    document.getElementById('peserta-detail-title').textContent = 'Gagal memuat';
+                    stats.style.display = 'none';
+                    body.innerHTML = `<div class="detail-error">${err.message || 'Data partisipan tidak ditemukan.'}</div>`;
+                });
+        }
+
+        function closePesertaDetail() {
+            const backdrop = document.getElementById('peserta-detail-modal');
+            if (!backdrop) return;
+            backdrop.classList.remove('show');
+            backdrop.setAttribute('aria-hidden', 'true');
+            if (!document.querySelector('.rank-modal-backdrop.show')) {
+                document.body.style.overflow = '';
+            }
+        }
+
         function loadPeserta(page = 1) {
             const params = new URLSearchParams({
                 search: searchTerm,
@@ -865,11 +1464,17 @@
                                         <i class="bi bi-download"></i> Unduh
                                    </a>`
                                 : `<span class="text-muted" style="font-size: 0.85rem; font-style: italic;">—</span>`;
+                            const cs = String(item.callsign || '').replace(/"/g, '&quot;');
+                            const nama = String(item.nama_peserta || '').replace(/</g, '&lt;');
 
                             tbody.innerHTML += `
                                 <tr>
-                                    <td><span class="badge">${item.callsign}</span></td>
-                                    <td><strong>${item.nama_peserta}</strong></td>
+                                    <td>
+                                        <span class="badge participant-link" data-callsign="${cs}" title="Lihat detail">${cs}</span>
+                                    </td>
+                                    <td>
+                                        <strong class="participant-link" data-callsign="${cs}" title="Lihat detail">${nama}</strong>
+                                    </td>
                                     <td>
                                         ${sertifikatCell}
                                     </td>

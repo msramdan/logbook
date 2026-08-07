@@ -14,20 +14,127 @@ class WebController extends Controller
     public function index()
     {
         $lastEvent = Event::latest()->first();
+        $topPeserta = $this->buildTopRankGroups(limit: 5);
 
-        $topPeserta = DB::table('pesertas')
+        return view('welcome', compact('lastEvent', 'topPeserta'));
+    }
+
+    /**
+     * Detail partisipan by callsign: logs, event diikuti, rank (log sama = rank sama).
+     */
+    public function getPesertaDetail(Request $request)
+    {
+        $callsign = trim((string) $request->input('callsign', ''));
+
+        if ($callsign === '') {
+            return response()->json(['message' => 'Callsign wajib diisi.'], 422);
+        }
+
+        $stats = $this->getCallsignStats();
+        $me = $stats->first(fn ($row) => strcasecmp($row->callsign, $callsign) === 0);
+
+        if (!$me) {
+            return response()->json(['message' => 'Data partisipan tidak ditemukan.'], 404);
+        }
+
+        $rankMap = $this->buildRankMap($stats);
+        $rank = $rankMap[$me->callsign] ?? null;
+        $peersAtRank = $stats->filter(fn ($row) => ($rankMap[$row->callsign] ?? null) === $rank)->count();
+
+        $events = DB::table('pesertas')
+            ->join('events', 'pesertas.event_id', '=', 'events.id')
+            ->where('pesertas.callsign', $me->callsign)
+            ->select(
+                'events.id',
+                'events.nama_event',
+                'events.tanggal_mulai',
+                'events.tanggal_selesai',
+                DB::raw('COUNT(pesertas.id) as jumlah_log_event')
+            )
+            ->groupBy(
+                'events.id',
+                'events.nama_event',
+                'events.tanggal_mulai',
+                'events.tanggal_selesai'
+            )
+            ->orderByDesc('events.tanggal_mulai')
+            ->get();
+
+        return response()->json([
+            'callsign' => $me->callsign,
+            'nama_peserta' => $me->nama_peserta,
+            'jumlah_log' => (int) $me->jumlah_log,
+            'jumlah_event' => (int) $me->jumlah_event,
+            'rank' => $rank,
+            'peers_at_rank' => $peersAtRank,
+            'events' => $events,
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, object>
+     */
+    private function getCallsignStats()
+    {
+        return DB::table('pesertas')
             ->select(
                 'callsign',
                 DB::raw('MAX(nama_peserta) as nama_peserta'),
-                DB::raw('COUNT(*) as jumlah_log')
+                DB::raw('COUNT(*) as jumlah_log'),
+                DB::raw('COUNT(DISTINCT event_id) as jumlah_event')
             )
             ->groupBy('callsign')
             ->orderByDesc('jumlah_log')
-            ->orderBy('callsign')
-            ->limit(5)
+            ->orderBy('nama_peserta')
             ->get();
+    }
 
-        return view('welcome', compact('lastEvent', 'topPeserta'));
+    /**
+     * Dense rank map: callsign => rank (same log count shares rank).
+     *
+     * @param  \Illuminate\Support\Collection  $stats
+     * @return array<string, int>
+     */
+    private function buildRankMap($stats): array
+    {
+        $grouped = $stats->groupBy('jumlah_log')->sortKeysDesc();
+        $map = [];
+        $rank = 1;
+
+        foreach ($grouped as $members) {
+            foreach ($members as $member) {
+                $map[$member->callsign] = $rank;
+            }
+            $rank++;
+        }
+
+        return $map;
+    }
+
+    /**
+     * Top N rank groups for homepage leaderboard.
+     */
+    private function buildTopRankGroups(int $limit = 5)
+    {
+        $stats = $this->getCallsignStats();
+        $grouped = $stats->groupBy('jumlah_log')->sortKeysDesc()->take($limit);
+
+        $topPeserta = collect();
+        $rank = 1;
+
+        foreach ($grouped as $jumlahLog => $members) {
+            $sorted = $members->sortBy(fn ($m) => strtoupper($m->nama_peserta))->values();
+            $topPeserta->push((object) [
+                'rank' => $rank,
+                'jumlah_log' => (int) $jumlahLog,
+                'members' => $sorted,
+                'display' => $sorted->first(),
+                'others_count' => max(0, $sorted->count() - 1),
+            ]);
+            $rank++;
+        }
+
+        return $topPeserta;
     }
 
     public function getPeserta(Request $request)
